@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:navbar/profile_screen/widgets/custome_small_text.dart';
-import '../profile_screen/widgets/custom_mask_widget.dart';
-import '../profile_screen/widgets/heading_text.dart';
+import '../all_profile_screen/profile_screen/widgets/custom_mask_widget.dart';
+import '../all_profile_screen/profile_screen/widgets/custome_small_text.dart';
+import '../all_profile_screen/profile_screen/widgets/heading_text.dart';
 import 'chat_detail_page/chat_detail_page.dart';
 import 'component/chat_text.dart';
 import 'component/custom_icon_button.dart';

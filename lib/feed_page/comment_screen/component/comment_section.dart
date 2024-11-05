@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../profile_screen/widgets/custom_mask_widget.dart';
+import '../../../all_profile_screen/profile_screen/widgets/custom_mask_widget.dart';
 import '../../../widgest/heading_text.dart';
 
 class CommentSection extends StatelessWidget {

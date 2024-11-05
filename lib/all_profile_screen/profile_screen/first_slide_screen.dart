@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:navbar/profile_screen/BooksApi/booksHome.dart';
-import 'package:navbar/profile_screen/movieApi/movieHome.dart';
-import 'package:navbar/profile_screen/spotify_Api/muisic_home.dart';
-import 'package:navbar/profile_screen/spotify_Api/spotify_api.dart';
-import 'package:navbar/profile_screen/movieApi/tmdb_api.dart';
-import 'package:navbar/profile_screen/BooksApi/google_books_api.dart';
-import 'package:navbar/profile_screen/widgets/Text_with_icon.dart';
-import 'package:navbar/profile_screen/widgets/custom_switch_button.dart';
-import 'package:navbar/profile_screen/widgets/custome_text_list.dart';
-import 'package:navbar/profile_screen/widgets/heading_text.dart';
+import 'package:navbar/all_profile_screen/profile_screen/spotify_Api/muisic_home.dart';
+import 'package:navbar/all_profile_screen/profile_screen/spotify_Api/spotify_api.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/Text_with_icon.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/affliation_widget.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/custom_switch_button.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/custome_text_list.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/life_mirror_widget.dart';
+
+import '../../widgest/heading_text.dart';
+import 'BooksApi/booksHome.dart';
+import 'BooksApi/google_books_api.dart';
+import 'model/affliations.dart';
+import 'movieApi/movieHome.dart';
+import 'movieApi/tmdb_api.dart';
 
 class FirstSlideScreen extends StatefulWidget {
   const FirstSlideScreen({super.key});
@@ -85,6 +89,52 @@ class _FirstSlideScreenState extends State<FirstSlideScreen> {
     }
   }
 
+  List<AffiliationData> affiliations = [
+    AffiliationData(
+      text1: 'Zodiac',
+      text2: 'Description',
+      image: 'assets/Cancer.png',
+      isNetworkImage: false,
+    ),
+    AffiliationData(
+      text1: 'Sprite Animal',
+      text2: 'Description',
+      image:
+      'assets/1.jpeg',
+      isNetworkImage: false,
+    ),
+    AffiliationData(
+      text1: 'Element',
+      text2: 'Description',
+      image:
+      'https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg',
+      isNetworkImage: true,
+    ),
+  ];
+
+  List<AffiliationData> loveLanguage = [
+    AffiliationData(
+      text1: 'Hobby',
+      text2: 'Description',
+      image: 'assets/Cancer.png',
+      isNetworkImage: false,
+    ),
+    AffiliationData(
+      text1: 'Call of the soul',
+      text2: 'Description',
+      image:
+      'assets/1.jpeg',
+      isNetworkImage: false,
+    ),
+    AffiliationData(
+      text1: 'Preferences',
+      text2: 'Description',
+      image:
+      'https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg',
+      isNetworkImage: true,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final List<String> sampleTexts = [];
@@ -113,13 +163,18 @@ class _FirstSlideScreenState extends State<FirstSlideScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              '❝Mother of 3 Baby❞',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '❝Add bio + ❞',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 10),
             Wrap(
@@ -134,6 +189,68 @@ class _FirstSlideScreenState extends State<FirstSlideScreen> {
               }).toList(),
             ),
             const CustomSwitchButton(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const HeadingText(
+                  text: 'AFFILATIONS',
+                ),
+                const SizedBox(height: 10),
+                GridView.builder(
+                  padding: EdgeInsets.zero,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.72,
+                  ),
+                  itemCount: affiliations.length,
+                  itemBuilder: (context, index) {
+                    final data = affiliations[index];
+                    return AffliationWidget(
+                      text1: data.text1,
+                      text2: data.text2,
+                      image: data.image,
+                      isNetworkImage: data.isNetworkImage,
+                    );
+                  },
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const HeadingText(
+                  text: 'LOVE LANGUAGE',
+                ),
+                const SizedBox(height: 10),
+                GridView.builder(
+                  padding: EdgeInsets.zero,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.75,
+                  ),
+                  itemCount: loveLanguage.length,
+                  itemBuilder: (context, index) {
+                    final data = loveLanguage[index];
+                    return AffliationWidget(
+                      text1: data.text1,
+                      text2: data.text2,
+                      image: data.image,
+                      isNetworkImage: data.isNetworkImage,
+                    );
+                  },
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
             const HeadingText(text: 'LIFE MEMORIES'),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -166,6 +283,31 @@ class _FirstSlideScreenState extends State<FirstSlideScreen> {
               ),
             ),
             CustomTextList(texts: sampleTexts),
+            const SizedBox(height: 20),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                HeadingText(text: 'THOUGHTS'),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: SizedBox(
+                    height: 135,
+                    width: 110,
+                    child: LifeMirrorWidget(
+                      image:
+                      'https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA5L3Jhd3BpeGVsX29mZmljZV8zM193YWxscGFwZXJfcGF0dGVybl9vZl9wYXN0ZWxfY29sb3JlZF9wZW5jaWxfdF9kNzIzNTM5YS1iMDJiLTQ0ZmItYjA5Zi1mNzQwNjMxYjM1NTNfMS5qcGc.jpg',
+                      isNetworkImage: true,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+
+
+
+
           ],
         ),
       ),

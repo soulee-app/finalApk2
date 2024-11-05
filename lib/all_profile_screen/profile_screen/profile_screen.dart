@@ -1,12 +1,11 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:navbar/profile_screen/postpage.dart';
-import 'package:navbar/profile_screen/sceond_slid_screen.dart';
-
-import 'package:navbar/profile_screen/widgets/custom_appbar.dart';
-import 'package:navbar/profile_screen/widgets/custom_text_button.dart';
-import 'package:navbar/profile_screen/widgets/custome_text.dart';
+import 'package:navbar/all_profile_screen/profile_screen/postpage.dart';
+import 'package:navbar/all_profile_screen/profile_screen/sceond_slid_screen.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/custom_appbar.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/custom_text_button.dart';
 import 'package:widget_mask/widget_mask.dart';
+import '../../widgest/custom_text.dart';
 import 'first_slide_screen.dart';
 import 'add_memory_page.dart';
 
@@ -53,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.05,
+            top: screenHeight * 0.03,
             left: 0,
             right: 0,
             child: const CustomAppbar(),
@@ -119,33 +118,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Positioned(
             top: screenHeight * 0.33,
-            left: screenWidth * 0.28,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            left: screenWidth * 0.32,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    const CustomText(text: 'Tanbir Hossain',icon: Icons.person,),
-                    SizedBox(width: screenWidth * 0.03),
-                    const CustomText(text: '24',icon: Icons.cake,),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.005),
-                Row(
-                  children: [
-                    const CustomText(text: 'Fur parcent',icon: Icons.pets,),
-                    SizedBox(width: screenWidth * 0.01),
-                    const CustomText(text: 'Female',icon: Icons.female,),
-                    SizedBox(width: screenWidth * 0.01),
-                    const CustomText(text: 'June 4',icon: Icons.calendar_month,),
-                  ],
-                ),
+                const CustomText(text: 'Tanbir Hossain',icon: Icons.person,),
+                SizedBox(width: screenWidth * 0.01),
+                const CustomText(text: '24',icon: Icons.cake,),
+              ],
+            ),
+          ),
+          Positioned(
+            top: screenHeight * 0.38,
+            left: screenWidth * 0.27,
+            child: Row(
+              children: [
+                const CustomText(text: 'Fur parcent',icon: Icons.pets,),
+                SizedBox(width: screenWidth * 0.01),
+                const CustomText(text: 'Female',icon: Icons.female,),
+                SizedBox(width: screenWidth * 0.01),
+                const CustomText(text: 'June 4',icon: Icons.calendar_month,),
               ],
             ),
           ),
           Positioned(
             top: screenHeight * 0.45,
-            left: screenWidth * 0.17,
+            left: screenWidth * 0.24,
             child: Row(
               children: [
                 CustomTextButton(
@@ -161,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(width: screenWidth * 0.02),
                 CustomTextButton(
                   text: 'Add A Memory',
-                  icon: Icons.memory_rounded,
+                  icon: Icons.image,
                   onTap: () {
                     Navigator.push(
                       context,

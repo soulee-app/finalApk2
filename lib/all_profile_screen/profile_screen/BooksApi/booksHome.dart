@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:navbar/profile_screen/BooksApi/book_list.dart';
-import 'package:navbar/profile_screen/BooksApi/google_books_api.dart';
-import 'package:navbar/profile_screen/spotify_Api/search_bar.dart';
+
+import '../movieApi/search_bar.dart';
+import 'book_list.dart';
+import 'google_books_api.dart';
 
 class BookHome extends StatefulWidget {
   final GoogleBooksApi googleBooksApi;

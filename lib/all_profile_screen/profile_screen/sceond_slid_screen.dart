@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:navbar/profile_screen/widgets/custome_small_text.dart';
-import 'package:navbar/profile_screen/widgets/feed_image.dart';
-import 'package:navbar/profile_screen/widgets/life_mirror_widget.dart';
-import 'package:navbar/profile_screen/widgets/small_widget_mask_image.dart';
-
-import '../widgest/heading_text.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/custome_small_text.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/feed_image.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/life_mirror_widget.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/small_widget_mask_image.dart';
+import '../../widgest/heading_text.dart';
 import 'model/affliations.dart';
 
 

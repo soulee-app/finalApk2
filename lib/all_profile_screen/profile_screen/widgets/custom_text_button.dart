@@ -22,11 +22,11 @@ class CustomTextButton extends StatelessWidget {
         color: const Color(0xFFFF675C),
         borderRadius: BorderRadius.circular(15),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
           child: Row(
             children: [
               Icon(icon, color: Colors.black),
-              const SizedBox(width: 8),
+              const SizedBox(width: 5),
               Text(
                 text,
                 style: TextStyle(

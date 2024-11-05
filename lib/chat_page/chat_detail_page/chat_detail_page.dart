@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:navbar/chat_page/component/custome_dot.dart';
 
-import '../../profile_screen/widgets/custom_mask_widget.dart';
+import '../../all_profile_screen/profile_screen/widgets/custom_mask_widget.dart';
 
 class ChatDetailPage extends StatelessWidget {
   final String title;

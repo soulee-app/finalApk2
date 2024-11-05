@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:navbar/all_profile_screen/Get_a_knot_report/get_a_knot_report.dart';
+import 'package:navbar/all_profile_screen/low_compitablity/low_compitablity_screen.dart';
 import 'package:navbar/menu_page/components/menu_widgets.dart';
 import 'package:navbar/menu_page/payment/paymentScreen.dart';
-import '../profile_screen/profile_screen.dart';
-import '../LoginPage/login_screen.dart'; // Import LoginScreen for navigation after logout
+import '../LoginPage/login_screen.dart';
+import '../all_profile_screen/Custom_knot/custom_knot_screen.dart';
+import '../all_profile_screen/profile_screen/profile_screen.dart'; // Import LoginScreen for navigation after logout
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -69,7 +72,7 @@ class MenuScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ProfileScreen()),
+                            builder: (context) => const LowCompitablityScreen()),
                       );
                     } else if (index == 4) {
                       Navigator.push(

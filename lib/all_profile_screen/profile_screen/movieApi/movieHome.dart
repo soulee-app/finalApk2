@@ -1,9 +1,10 @@
 // lib/screens/movie_home.dart
 
 import 'package:flutter/material.dart';
-import 'package:navbar/profile_screen/movieApi/movie_list.dart';
-import 'package:navbar/profile_screen/movieApi/tmdb_api.dart';
-import 'package:navbar/profile_screen/spotify_Api/search_bar.dart';
+import 'package:navbar/all_profile_screen/profile_screen/movieApi/tmdb_api.dart';
+
+import '../BooksApi/search_bar.dart';
+import 'movie_list.dart';
 
 class MovieHome extends StatefulWidget {
   final TMDBApi tmdbApi;

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:navbar/profile_screen/widgets/small_widget_mask_image.dart';
+import 'package:navbar/all_profile_screen/profile_screen/widgets/small_widget_mask_image.dart';
 
 import 'custome_small_text.dart';
 import 'feed_image_data.dart';

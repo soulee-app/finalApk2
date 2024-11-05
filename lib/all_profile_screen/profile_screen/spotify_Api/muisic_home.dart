@@ -1,7 +1,7 @@
 // lib/screens/music_home.dart
 
 import 'package:flutter/material.dart';
-import 'package:navbar/profile_screen/spotify_Api/spotify_api.dart';
+import 'package:navbar/all_profile_screen/profile_screen/spotify_Api/spotify_api.dart';
 
 class MusicHome extends StatefulWidget {
   final SpotifyApi spotifyApi;

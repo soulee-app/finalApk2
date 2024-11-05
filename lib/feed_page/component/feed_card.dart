@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:navbar/feed_page/comment_screen/chat_screen.dart';
 import 'package:navbar/feed_page/component/feed_image_view.dart';
-import '../../profile_screen/widgets/custom_mask_widget.dart';
-import '../../profile_screen/widgets/custome_text.dart';
-import '../../profile_screen/widgets/heading_text.dart';
+import '../../all_profile_screen/profile_screen/widgets/custom_mask_widget.dart';
+import '../../all_profile_screen/profile_screen/widgets/custome_text.dart';
+import '../../all_profile_screen/profile_screen/widgets/heading_text.dart';
 import 'comment_button.dart';
 // Import the custom video player
 
