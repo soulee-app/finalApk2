@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:navbar/HomePage.dart';
+import 'package:navbar/LoginPage/forgetpass.dart';
 import 'signup_screen.dart';
 import 'package:flutter/gestures.dart';
 
@@ -16,38 +17,31 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus();
-  }
+  void _login() async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      User? user = userCredential.user;
 
-  void _checkLoginStatus() {
-    // Check if the user is already signed in
-    _auth.authStateChanges().listen((User? user) {
-      if (user != null) {
-        // If a user is logged in, navigate to HomePage directly
+      // Check if email is verified
+      if (user != null && user.emailVerified) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
+      } else {
+        // Sign out and show a message if the email is not verified
+        await _auth.signOut();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please verify your email to log in.")),
+        );
       }
-    });
-  }
-
-  void _login() async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      // Navigate to HomePage after successful login
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
     } catch (e) {
-      print(e); // Handle errors here, e.g., show an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login failed: ${e.toString()}")),
+      );
     }
   }
 
@@ -122,6 +116,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 15),
+              // Forgot Password Button
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordScreen()),
+                  );
+                },
+                child: const Text(
+                  'Forgot Password?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
               // Sign Up link
               RichText(
                 text: TextSpan(
@@ -158,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      // Handle terms and conditions click
+                      // Handle Terms and Conditions
                     },
                     child: const Text(
                       'Terms and Conditions',
@@ -167,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Handle privacy policy click
+                      // Handle Privacy Policy
                     },
                     child: const Text(
                       'Privacy Policy',

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:navbar/LoginPage/component/Singup_Custom_image.dart';
 import 'dart:io';
 import 'login_screen.dart';
 
@@ -17,19 +16,19 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  final TextEditingController _genderController = TextEditingController();
-  final TextEditingController _bloodGroupController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   bool _isFirstStep = true;
+  String? _selectedGender;
   File? _selectedImage;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -73,14 +72,21 @@ class _SignupScreenState extends State<SignupScreen> {
   void _signup() async {
     if (_nameController.text.isEmpty ||
         _dobController.text.isEmpty ||
-        _genderController.text.isEmpty ||
-        _bloodGroupController.text.isEmpty ||
+        _selectedGender == null ||
         _emailController.text.isEmpty ||
         _phoneController.text.isEmpty ||
         _passwordController.text.isEmpty ||
-        _confirmPasswordController.text.isEmpty) {
+        _confirmPasswordController.text.isEmpty ||
+        _usernameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all required fields.')),
+      );
+      return;
+    }
+
+    if (!_isValidEmail(_emailController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address.')),
       );
       return;
     }
@@ -99,36 +105,60 @@ class _SignupScreenState extends State<SignupScreen> {
         password: _passwordController.text,
       );
 
-      String? imageUrl;
-      if (_selectedImage != null) {
-        imageUrl = await _uploadImage(_selectedImage!);
+      User? user = userCredential.user;
+
+      // Send email verification
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content:
+                  Text('Verification email sent! Please verify and log in.')),
+        );
+
+        // Sign out the user to prevent further actions before verification
+        await _auth.signOut();
+
+        // Navigate back to LoginScreen after sending the verification email
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+
+      switch (e.code) {
+        case 'email-already-in-use':
+          errorMessage =
+              'The email is already in use. Please use another email.';
+          break;
+        case 'weak-password':
+          errorMessage =
+              'The password is too weak. Please choose a stronger password.';
+          break;
+        case 'invalid-email':
+          errorMessage =
+              'The email address is invalid. Please check and try again.';
+          break;
+        default:
+          errorMessage = 'Signup failed. Please try again later.';
       }
 
-      await _firestore.collection('users').doc(userCredential.user!.uid).set({
-        'name': _nameController.text,
-        'dob': _dobController.text,
-        'gender': _genderController.text,
-        'blood_group': _bloodGroupController.text,
-        'email': _emailController.text,
-        'phone': _phoneController.text,
-        'profile_image': imageUrl,
-      });
-
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Signup successful!')),
-      );
-
-      // Navigate to LoginScreen after successful signup
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        SnackBar(content: Text(errorMessage)),
       );
     } catch (e) {
-      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Signup failed. Please try again later.')),
+        const SnackBar(
+            content: Text('An error occurred. Please try again later.')),
       );
     }
+  }
+
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+    return emailRegex.hasMatch(email);
   }
 
   InputDecoration _inputDecoration(String label, {Widget? suffixIcon}) {
@@ -153,30 +183,50 @@ class _SignupScreenState extends State<SignupScreen> {
         Image.asset('assets/sign_up/1726164386864.png', height: 100),
         const SizedBox(height: 20),
         TextField(
-            controller: _nameController, decoration: _inputDecoration('Name')),
+          controller: _nameController,
+          decoration: _inputDecoration('Name'),
+        ),
         const SizedBox(height: 20),
         TextField(
           controller: _dobController,
-          decoration: _inputDecoration('Date of Birth',
-              suffixIcon: const Icon(Icons.calendar_today, color: Colors.grey)),
+          decoration: _inputDecoration(
+            'Date of Birth',
+            suffixIcon: const Icon(Icons.calendar_today, color: Colors.grey),
+          ),
           readOnly: true,
           onTap: () => _selectDate(context),
         ),
         const SizedBox(height: 20),
-        TextField(
-            controller: _genderController,
-            decoration: _inputDecoration('Gender')),
+        // Gender dropdown with initial empty selection
+        DropdownButtonFormField<String>(
+          value: _selectedGender,
+          hint: const Text('Select Gender'),
+          decoration: _inputDecoration('Gender'),
+          items: const [
+            DropdownMenuItem(value: 'Male', child: Text('Male')),
+            DropdownMenuItem(value: 'Female', child: Text('Female')),
+          ],
+          onChanged: (String? newValue) {
+            setState(() {
+              _selectedGender = newValue;
+            });
+          },
+        ),
         const SizedBox(height: 20),
         TextField(
-            controller: _bloodGroupController,
-            decoration: _inputDecoration('Blood Group')),
+          controller: _usernameController,
+          decoration: _inputDecoration('Username').copyWith(
+            prefixText: 'https://souleeapp.com/',
+          ),
+        ),
         const SizedBox(height: 30),
         ElevatedButton(
           onPressed: () => setState(() => _isFirstStep = false),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFF6F61),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0)),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
           ),
           child: const Text('Next', style: TextStyle(fontSize: 16)),
@@ -201,7 +251,12 @@ class _SignupScreenState extends State<SignupScreen> {
                 fit: BoxFit.cover,
               ),
               if (_selectedImage != null)
-                SingUpCustomImage(height: 150,width: 150, imageFile: _selectedImage!,),
+                Image.file(
+                  _selectedImage!,
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
               if (_selectedImage == null)
                 const Icon(
                   Icons.camera_alt,
@@ -213,29 +268,34 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         const SizedBox(height: 20),
         TextField(
-            controller: _emailController,
-            decoration: _inputDecoration('Email')),
+          controller: _emailController,
+          decoration: _inputDecoration('Email'),
+        ),
         const SizedBox(height: 20),
         TextField(
-            controller: _phoneController,
-            decoration: _inputDecoration('Phone Number')),
+          controller: _phoneController,
+          decoration: _inputDecoration('Phone Number'),
+        ),
         const SizedBox(height: 20),
         TextField(
-            controller: _passwordController,
-            decoration: _inputDecoration('Password'),
-            obscureText: true),
+          controller: _passwordController,
+          decoration: _inputDecoration('Password'),
+          obscureText: true,
+        ),
         const SizedBox(height: 20),
         TextField(
-            controller: _confirmPasswordController,
-            decoration: _inputDecoration('Confirm Password'),
-            obscureText: true),
+          controller: _confirmPasswordController,
+          decoration: _inputDecoration('Confirm Password'),
+          obscureText: true,
+        ),
         const SizedBox(height: 30),
         ElevatedButton(
           onPressed: _signup,
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFF6F61),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0)),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
           ),
           child: const Text('Sign Up', style: TextStyle(fontSize: 16)),
